@@ -26,9 +26,9 @@ export default function Login() {
       <div className="hidden w-1/2 flex-col justify-between bg-primary p-12 lg:flex">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary font-heading text-sm font-bold text-secondary-foreground">
-            LM
+            TL
           </div>
-          <span className="font-heading text-xl font-bold text-primary-foreground">LearnHub</span>
+          <span className="font-heading text-xl font-bold text-primary-foreground">TargetLearn</span>
         </div>
         <div>
           <h1 className="font-heading text-4xl font-extrabold leading-tight text-primary-foreground">
@@ -61,7 +61,7 @@ export default function Login() {
         <div className="w-full max-w-md">
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <BookOpen className="h-8 w-8 text-primary" />
-            <span className="font-heading text-xl font-bold text-foreground">LearnHub</span>
+            <span className="font-heading text-xl font-bold text-foreground">TargetLearn</span>
           </div>
 
           <h2 className="font-heading text-2xl font-bold text-foreground">Sign in to your account</h2>

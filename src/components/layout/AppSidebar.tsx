@@ -81,7 +81,7 @@ export default function AppSidebar() {
   const isHr = user?.role === "hr";
   const isIt = user?.role === "it_admin";
   const isManagement = user?.role === "management";
-  
+
   const navItems = isLdAdmin ? ldNavItems : isHr ? hrNavItems : isIt ? itNavItems : isManagement ? managementNavItems : employeeNavItems;
 
   return (
@@ -94,18 +94,18 @@ export default function AppSidebar() {
       {/* Logo */}
       <div className="flex h-16 items-center gap-3 border-b border-sidebar-border px-4">
         <div className={cn(
-          "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg font-heading text-sm font-bold", 
-          isLdAdmin ? "bg-primary text-primary-foreground" : 
-          isHr ? "bg-success text-success-foreground" : 
-          isIt ? "bg-destructive text-destructive-foreground" : 
-          isManagement ? "bg-warning text-warning-foreground" :
-          "bg-secondary text-secondary-foreground"
+          "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg font-heading text-sm font-bold",
+          isLdAdmin ? "bg-primary text-primary-foreground" :
+            isHr ? "bg-success text-success-foreground" :
+              isIt ? "bg-destructive text-destructive-foreground" :
+                isManagement ? "bg-warning text-warning-foreground" :
+                  "bg-secondary text-secondary-foreground"
         )}>
           {isLdAdmin ? "L&D" : isHr ? "HR" : isIt ? "IT" : isManagement ? "EX" : "LM"}
         </div>
         {!collapsed && (
           <span className="font-heading text-lg font-bold text-sidebar-accent-foreground">
-            LearnHub
+            TargetLearn
           </span>
         )}
       </div>
@@ -147,34 +147,34 @@ export default function AppSidebar() {
               )}
             >
               <div className="flex items-center gap-3">
-                {isLdAdmin ? <Shield className="h-4 w-4 shrink-0 text-primary" /> : 
-                isHr ? <Briefcase className="h-4 w-4 shrink-0 text-success" /> :
-                isIt ? <Terminal className="h-4 w-4 shrink-0 text-destructive" /> :
-                isManagement ? <Activity className="h-4 w-4 shrink-0 text-warning" /> :
-                <Users className="h-4 w-4 shrink-0 text-secondary-foreground" />}
+                {isLdAdmin ? <Shield className="h-4 w-4 shrink-0 text-primary" /> :
+                  isHr ? <Briefcase className="h-4 w-4 shrink-0 text-success" /> :
+                    isIt ? <Terminal className="h-4 w-4 shrink-0 text-destructive" /> :
+                      isManagement ? <Activity className="h-4 w-4 shrink-0 text-warning" /> :
+                        <Users className="h-4 w-4 shrink-0 text-secondary-foreground" />}
                 {!collapsed && <span>
                   {isLdAdmin ? "L&D Admin View" : isHr ? "HR Admin View" : isIt ? "IT Admin View" : isManagement ? "Executive View" : "Employee View"}
                 </span>}
               </div>
               {!collapsed && <ChevronDown className="h-4 w-4 opacity-50 shrink-0" />}
             </div>
-            
+
             {/* Native transparent select overlaying the button perfectly */}
             <select
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer text-base sm:text-sm"
-                value={user?.role || "employee"}
-                onChange={(e) => switchRole(e.target.value as any)}
-                title="Change User View"
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer text-base sm:text-sm"
+              value={user?.role || "employee"}
+              onChange={(e) => switchRole(e.target.value as any)}
+              title="Change User View"
             >
-                <option value="employee">Employee View</option>
-                <option value="l&d_admin">L&D Admin View</option>
-                <option value="hr">HR Admin View</option>
-                <option value="it_admin">IT Admin View</option>
-                <option value="management">Executive View</option>
+              <option value="employee">Employee View</option>
+              <option value="l&d_admin">L&D Admin View</option>
+              <option value="hr">HR Admin View</option>
+              <option value="it_admin">IT Admin View</option>
+              <option value="management">Executive View</option>
             </select>
           </div>
         </div>
-        
+
         <div className="h-px bg-sidebar-border my-2 w-full"></div>
 
         {user && (
