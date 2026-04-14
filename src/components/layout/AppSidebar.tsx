@@ -101,7 +101,7 @@ export default function AppSidebar() {
                 isManagement ? "bg-warning text-warning-foreground" :
                   "bg-secondary text-secondary-foreground"
         )}>
-          {isLdAdmin ? "L&D" : isHr ? "HR" : isIt ? "IT" : isManagement ? "EX" : "LM"}
+          {isLdAdmin ? "L&D" : isHr ? "HR" : isIt ? "IT" : isManagement ? "EX" : "EM"}
         </div>
         {!collapsed && (
           <span className="font-heading text-lg font-bold text-sidebar-accent-foreground">

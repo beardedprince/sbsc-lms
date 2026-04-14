@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ArrowLeft, Play, FileText, HelpCircle, ClipboardCheck,
   Lock, CheckCircle2, Circle, Clock, Users, Award,
@@ -29,6 +29,17 @@ export default function CourseDetail() {
   const [activeModuleId, setActiveModuleId] = useState<string | null>(null);
   const [showDescription, setShowDescription] = useState(true);
 
+  const [localModules, setLocalModules] = useState<Module[]>(() => {
+    return course ? getModulesForCourse(course.id, course.modules) : [];
+  });
+
+  useEffect(() => {
+    if (course) {
+      setLocalModules(getModulesForCourse(course.id, course.modules));
+      setActiveModuleId(null);
+    }
+  }, [courseId, course]);
+
   if (!course) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
@@ -41,10 +52,37 @@ export default function CourseDetail() {
     );
   }
 
-  const modules = getModulesForCourse(course.id, course.modules);
-  const completedModules = modules.filter((m) => m.status === "completed").length;
-  const activeModule = activeModuleId ? modules.find((m) => m.id === activeModuleId) : null;
-  const currentModule = activeModule || modules.find((m) => m.status === "in_progress") || modules.find((m) => m.status === "available");
+  const completedModules = localModules.filter((m) => m.status === "completed").length;
+  const activeModule = activeModuleId ? localModules.find((m) => m.id === activeModuleId) : null;
+  const currentModule = activeModule || localModules.find((m) => m.status === "in_progress") || localModules.find((m) => m.status === "available") || localModules[localModules.length - 1];
+
+  const handleCompleteModule = () => {
+    if (!currentModule || currentModule.status === "completed") return;
+    
+    setLocalModules(prev => {
+      const updated = [...prev];
+      const currentIndex = updated.findIndex(m => m.id === currentModule.id);
+      
+      if (currentIndex !== -1) {
+        updated[currentIndex] = { ...updated[currentIndex], status: "completed" };
+        
+        // Unlock next module if it's locked or available
+        if (currentIndex + 1 < updated.length) {
+          if (updated[currentIndex + 1].status === "locked" || updated[currentIndex + 1].status === "available") {
+             updated[currentIndex + 1] = { ...updated[currentIndex + 1], status: "in_progress" };
+          }
+          // Intentionally wrapping the setActiveModuleId inside a timeout or doing it synchronously
+          // It's safe to do here if React batches correctly, otherwise it's just state updates.
+          setTimeout(() => setActiveModuleId(updated[currentIndex + 1].id), 0);
+        } else {
+          setTimeout(() => setActiveModuleId(null), 0);
+        }
+      }
+      return updated;
+    });
+  };
+
+  const dynamicProgress = Math.round((completedModules / localModules.length) * 100) || 0;
 
   return (
     <div className="space-y-6">
@@ -83,16 +121,16 @@ export default function CourseDetail() {
               <svg className="h-20 w-20 -rotate-90" viewBox="0 0 80 80">
                 <circle cx="40" cy="40" r="34" fill="none" strokeWidth="6" className="stroke-muted" />
                 <circle cx="40" cy="40" r="34" fill="none" strokeWidth="6" strokeLinecap="round"
-                  className="stroke-secondary" strokeDasharray={`${2 * Math.PI * 34}`}
-                  strokeDashoffset={`${2 * Math.PI * 34 * (1 - course.progress / 100)}`} />
+                  className="stroke-secondary transition-all duration-1000" strokeDasharray={`${2 * Math.PI * 34}`}
+                  strokeDashoffset={`${2 * Math.PI * 34 * (1 - dynamicProgress / 100)}`} />
               </svg>
               <span className="absolute inset-0 flex items-center justify-center font-heading text-lg font-bold text-foreground">
-                {course.progress}%
+                {dynamicProgress}%
               </span>
             </div>
-            <p className="text-xs text-muted-foreground">{completedModules}/{modules.length} modules</p>
-            {course.status === "completed" && (
-              <button className="mt-1 flex items-center gap-1.5 rounded-lg bg-secondary px-4 py-2 text-xs font-medium text-secondary-foreground hover:bg-secondary/90">
+            <p className="text-xs text-muted-foreground">{completedModules}/{localModules.length} modules</p>
+            {dynamicProgress === 100 && (
+              <button className="mt-1 flex items-center gap-1.5 rounded-lg bg-secondary px-4 py-2 text-xs font-medium text-secondary-foreground hover:bg-secondary/90 transition-all animate-in fade-in zoom-in duration-500">
                 <Award className="h-3.5 w-3.5" /> View Certificate
               </button>
             )}
@@ -148,7 +186,10 @@ export default function CourseDetail() {
                 </div>
                 <div className="mt-4 flex gap-3">
                   {currentModule.status !== "locked" && currentModule.status !== "completed" && (
-                    <button className="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">
+                    <button 
+                      onClick={handleCompleteModule} 
+                      className="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-all active:scale-95"
+                    >
                       {currentModule.status === "in_progress" ? "Continue" : "Start"} {currentModule.type === "exam" ? "Exam" : currentModule.type === "quiz" ? "Quiz" : "Module"}
                     </button>
                   )}
@@ -193,13 +234,13 @@ export default function CourseDetail() {
         <div className="rounded-xl border border-border bg-card">
           <div className="border-b border-border p-4">
             <h3 className="font-heading text-sm font-semibold text-card-foreground">Course Modules</h3>
-            <p className="mt-1 text-xs text-muted-foreground">{completedModules} of {modules.length} completed</p>
+            <p className="mt-1 text-xs text-muted-foreground">{completedModules} of {localModules.length} completed</p>
             <div className="mt-2 h-1.5 rounded-full bg-muted">
-              <div className="h-full rounded-full bg-secondary transition-all" style={{ width: `${(completedModules / modules.length) * 100}%` }} />
+              <div className="h-full rounded-full bg-secondary transition-all" style={{ width: `${(completedModules / localModules.length) * 100}%` }} />
             </div>
           </div>
           <ul className="max-h-[600px] overflow-y-auto">
-            {modules.map((mod, index) => (
+            {localModules.map((mod, index) => (
               <ModuleItem
                 key={mod.id}
                 module={mod}
