@@ -103,9 +103,9 @@ export default function Login() {
           </form>
 
           <div className="mt-6 text-center">
-            <button className="text-sm text-secondary hover:underline">
+            {/* <button className="text-sm text-secondary hover:underline">
               Alternate Login / Register (Multi-Tenant)
-            </button>
+            </button> */}
           </div>
           <p className="mt-8 text-center text-xs text-muted-foreground">
             Having trouble? Contact IT Support or your L&D Administrator
