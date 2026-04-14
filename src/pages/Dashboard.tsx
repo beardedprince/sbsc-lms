@@ -1,4 +1,4 @@
-import { BookOpen, Award, Clock, TrendingUp, ArrowRight, Play, AlertCircle } from "lucide-react";
+import { BookOpen, Award, Clock, TrendingUp, ArrowRight, Play, AlertCircle, Sparkles } from "lucide-react";
 import { mockCourses } from "@/data/mockCourses";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -56,8 +56,16 @@ export default function Dashboard() {
             <div className="space-y-3">
               {assignedCourses.map((course) => (
                 <Link to={`/courses/${course.id}`} key={course.id} className="flex items-center gap-4 rounded-xl border border-border bg-card p-4 transition-shadow hover:shadow-md">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                    <Play className="h-5 w-5 text-primary" />
+                  <div className="relative overflow-hidden flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-muted">
+                    {course.thumbnail ? (
+                      <>
+                        <img src={course.thumbnail} alt={course.title} className="absolute inset-0 w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-black/20"></div>
+                        <Play className="h-5 w-5 text-white relative z-10 drop-shadow-md" />
+                      </>
+                    ) : (
+                      <Play className="h-5 w-5 text-primary" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="truncate font-medium text-card-foreground">{course.title}</p>
@@ -84,24 +92,35 @@ export default function Dashboard() {
           {/* Recommended */}
           <section>
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="font-heading text-lg font-semibold text-foreground">Recommended for You</h3>
+              <h3 className="font-heading text-lg font-semibold text-foreground flex items-center gap-2">
+                 Recommended for You <span className="bg-primary/10 text-primary text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full flex items-center gap-1"><Sparkles className="h-3 w-3" /> AI Suggested</span>
+              </h3>
               <Link to="/courses" className="flex items-center gap-1 text-sm font-medium text-secondary hover:underline">
                 View All <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
+            <p className="text-sm text-muted-foreground mb-4">Based on your role and recent progress, we suggest these following courses:</p>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {recommendedCourses.map((course) => (
-                <div key={course.id} className="rounded-xl border border-border bg-card p-5 transition-shadow hover:shadow-md">
-                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-accent/20">
-                    <BookOpen className="h-5 w-5 text-accent" />
-                  </div>
-                  <h4 className="font-medium text-card-foreground">{course.title}</h4>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{course.description}</p>
-                  <div className="mt-3 flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">{course.duration}</span>
-                    <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-medium", statusBadge[course.status].className)}>
-                      {statusBadge[course.status].label}
-                    </span>
+                <div key={course.id} className="relative overflow-hidden rounded-xl border border-border bg-card p-5 transition-shadow hover:shadow-md">
+                  {course.thumbnail && (
+                    <>
+                      <img src={course.thumbnail} alt={course.title} className="absolute inset-0 w-full h-full object-cover opacity-40" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-background/30"></div>
+                    </>
+                  )}
+                  <div className="relative z-10">
+                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-accent/20 backdrop-blur-md">
+                      <BookOpen className="h-5 w-5 text-accent" />
+                    </div>
+                    <h4 className="font-medium text-card-foreground">{course.title}</h4>
+                    <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{course.description}</p>
+                    <div className="mt-3 flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground font-medium">{course.duration}</span>
+                      <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-medium shadow-sm backdrop-blur-sm", statusBadge[course.status].className)}>
+                        {statusBadge[course.status].label}
+                      </span>
+                    </div>
                   </div>
                 </div>
               ))}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, Filter, BookOpen, Play, Clock, Users } from "lucide-react";
+import { Search, Filter, BookOpen, Play, Clock, Users, Sparkles } from "lucide-react";
 import { mockCourses, type Course } from "@/data/mockCourses";
 import { cn } from "@/lib/utils";
 
@@ -50,9 +50,12 @@ export default function Courses() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search courses..."
-            className="h-10 w-full max-w-md rounded-lg border border-input bg-card pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            placeholder="Search courses or ask for a suggestion..."
+            className="h-10 w-full max-w-md rounded-lg border border-input bg-card pl-10 pr-28 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
+          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[10px] uppercase font-bold pointer-events-none">
+            <Sparkles className="h-3 w-3" /> AI Search
+          </div>
         </div>
         <button className="flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-4 text-sm font-medium text-foreground hover:bg-muted">
           <Filter className="h-4 w-4" /> Filters
@@ -100,10 +103,20 @@ function CourseCard({ course }: { course: Course }) {
 
   return (
     <Link to={`/courses/${course.id}`} className="group flex flex-col rounded-xl border border-border bg-card transition-all hover:shadow-lg">
-      {/* Thumbnail placeholder */}
-      <div className="relative flex h-40 items-center justify-center rounded-t-xl bg-primary/5">
-        <Icon className="h-10 w-10 text-primary/30" />
-        <span className={cn("absolute right-3 top-3 rounded-full px-2.5 py-0.5 text-xs font-medium", statusBadge[course.status].className)}>
+      {/* Thumbnail */}
+      <div className="relative flex h-40 overflow-hidden items-center justify-center rounded-t-xl bg-muted group-hover:bg-muted/80 transition-colors">
+        {course.thumbnail ? (
+          <>
+            <img src={course.thumbnail} alt={course.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <Icon className="h-10 w-10 text-white/50 backdrop-blur-sm rounded-lg p-2 bg-black/20 drop-shadow-md" />
+            </div>
+          </>
+        ) : (
+          <Icon className="h-10 w-10 text-primary/30 relative z-10 transition-transform duration-500 group-hover:scale-110" />
+        )}
+        <span className={cn("absolute right-3 top-3 rounded-full px-2.5 py-0.5 text-xs font-medium z-20 shadow-sm backdrop-blur-md", statusBadge[course.status].className)}>
           {statusBadge[course.status].label}
         </span>
       </div>

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import {
   ArrowLeft, Play, FileText, HelpCircle, ClipboardCheck,
   Lock, CheckCircle2, Circle, Clock, Users, Award,
-  ChevronDown, ChevronRight, MessageSquare, AlertCircle,
+  ChevronDown, ChevronRight, MessageSquare, AlertCircle, Sparkles
 } from "lucide-react";
 import { mockCourses } from "@/data/mockCourses";
 import { getModulesForCourse, type Module } from "@/data/mockModules";
@@ -143,34 +143,40 @@ export default function CourseDetail() {
         {/* Video / Content area */}
         <div className="space-y-4 lg:col-span-2">
           {/* Player */}
-          <div className="overflow-hidden rounded-xl border border-border bg-card">
-            <div className="relative flex aspect-video items-center justify-center bg-foreground/5">
-              {currentModule?.status === "locked" ? (
-                <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                  <Lock className="h-12 w-12" />
-                  <p className="text-sm font-medium">Complete previous modules to unlock</p>
-                </div>
-              ) : currentModule?.type === "video" ? (
-                <button className="group flex flex-col items-center gap-3">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/90 text-primary-foreground shadow-lg transition-transform group-hover:scale-110">
-                    <Play className="h-7 w-7 ml-1" />
+          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+            <div className="relative flex aspect-video overflow-hidden items-center justify-center bg-black/90">
+              {course.thumbnail && (
+                 <img src={course.thumbnail} alt={course.title} className="absolute inset-0 w-full h-full object-cover opacity-30 filter blur-sm scale-110 pointer-events-none" />
+              )}
+              
+              <div className="relative z-10 flex flex-col items-center">
+                {currentModule?.status === "locked" ? (
+                  <div className="flex flex-col items-center gap-2 text-white">
+                    <Lock className="h-12 w-12" />
+                    <p className="text-sm font-medium">Complete previous modules to unlock</p>
                   </div>
-                  <p className="text-sm font-medium text-foreground">Play Video</p>
-                </button>
-              ) : currentModule?.type === "text" ? (
-                <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                  <FileText className="h-12 w-12" />
-                  <p className="text-sm font-medium">Reading Material</p>
-                </div>
-              ) : currentModule?.type === "quiz" || currentModule?.type === "exam" ? (
-                <div className="flex flex-col items-center gap-3">
-                  <ClipboardCheck className="h-12 w-12 text-accent" />
-                  <p className="text-sm font-medium text-foreground">
-                    {currentModule.type === "exam" ? "Start Exam" : "Start Quiz"}
-                  </p>
-                  <p className="text-xs text-muted-foreground">Time limit: {currentModule.duration}</p>
-                </div>
-              ) : null}
+                ) : currentModule?.type === "video" ? (
+                  <button className="group flex flex-col items-center gap-3">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/90 text-primary-foreground shadow-[0_0_30px_rgba(var(--primary),0.5)] transition-all group-hover:scale-110 group-hover:bg-primary">
+                      <Play className="h-7 w-7 ml-1" />
+                    </div>
+                    <p className="text-sm font-medium text-white shadow-sm">Play Video</p>
+                  </button>
+                ) : currentModule?.type === "text" ? (
+                  <div className="flex flex-col items-center gap-2 text-white">
+                    <FileText className="h-12 w-12" />
+                    <p className="text-sm font-medium shadow-sm">Reading Material</p>
+                  </div>
+                ) : currentModule?.type === "quiz" || currentModule?.type === "exam" ? (
+                  <div className="flex flex-col items-center gap-3">
+                    <ClipboardCheck className="h-12 w-12 text-accent drop-shadow-md" />
+                    <p className="text-sm font-medium text-white shadow-sm">
+                      {currentModule.type === "exam" ? "Start Exam" : "Start Quiz"}
+                    </p>
+                    <p className="text-xs text-white/70">Time limit: {currentModule.duration}</p>
+                  </div>
+                ) : null}
+              </div>
             </div>
             {/* Module info below player */}
             {currentModule && (
@@ -183,6 +189,12 @@ export default function CourseDetail() {
                   <span className="shrink-0 rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
                     {currentModule.duration}
                   </span>
+                </div>
+                
+                {/* AI Summary Section */}
+                <div className="mt-4 bg-primary/5 border border-primary/20 rounded-lg p-3">
+                   <p className="text-xs font-semibold text-primary flex items-center gap-1.5 mb-1.5"><Sparkles className="h-3 w-3" /> AI Insights</p>
+                   <p className="text-xs text-muted-foreground leading-relaxed">Key takeaways from this module: You will learn foundational principles that directly impact your quarterly KPIs. Pay special attention to the core frameworks discussed, as our analytics suggest they frequently appear in the final assessment.</p>
                 </div>
                 <div className="mt-4 flex gap-3">
                   {currentModule.status !== "locked" && currentModule.status !== "completed" && (

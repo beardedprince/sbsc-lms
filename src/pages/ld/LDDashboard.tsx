@@ -1,4 +1,4 @@
-import { Users, BookOpen, GraduationCap, Clock, TrendingUp, BarChart3, AlertCircle } from "lucide-react";
+import { Users, BookOpen, GraduationCap, Clock, TrendingUp, BarChart3, AlertCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const stats = [
@@ -75,20 +75,31 @@ export default function LDDashboard() {
 
         {/* Action Items */}
         <div className="rounded-xl border border-border bg-card shadow-sm p-6 flex flex-col">
-          <h3 className="font-heading text-lg font-semibold text-foreground mb-6">Pending L&D Actions</h3>
+          <div className="mb-6 flex items-center justify-between">
+            <h3 className="font-heading text-lg font-semibold text-foreground">AI Action Insights</h3>
+            <span className="bg-primary/10 text-primary text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full flex items-center gap-1"><Sparkles className="h-3 w-3" /> Auto-Generated</span>
+          </div>
           <div className="space-y-4 flex-1">
             <div className="flex gap-4">
               <div className="mt-0.5 h-8 w-8 shrink-0 flex items-center justify-center rounded-full bg-warning/20 text-warning">
                 <AlertCircle className="h-4 w-4" />
               </div>
               <div>
-                <p className="text-sm font-medium text-foreground">14 Overdue Compliance Certs</p>
-                <p className="mt-1 text-xs text-muted-foreground line-clamp-2">14 Retail Banking staff have missed the Q2 AML compliance window.</p>
-                <Button variant="link" className="px-0 h-auto text-xs mt-1 text-primary">Send Reminders</Button>
+                <p className="text-sm font-medium text-foreground">3 users at risk of non-compliance</p>
+                <p className="mt-1 text-xs text-muted-foreground line-clamp-2">Alert: Executive branch management has not initiated Q3 training.</p>
+                <Button variant="link" className="px-0 h-auto text-xs mt-1 text-primary">Escalate</Button>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="mt-0.5 h-8 w-8 shrink-0 flex items-center justify-center rounded-full bg-info/20 text-info">
+                <BookOpen className="h-4 w-4" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">Content Engagement Warning</p>
+                <p className="mt-1 text-xs text-muted-foreground line-clamp-2">AML Module 2 has low engagement — consider updating content or checking the video source.</p>
+                <Button variant="link" className="px-0 h-auto text-xs mt-1 text-primary">Review Module</Button>
+              </div>
+            </div>
                 <Users className="h-4 w-4" />
               </div>
               <div>
@@ -109,7 +120,7 @@ export default function LDDashboard() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+    //   </div>
+    // </div>
   );
 }

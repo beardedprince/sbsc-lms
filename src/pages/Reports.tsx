@@ -1,4 +1,5 @@
-import { BarChart3, Download, FileText, PieChart, TrendingUp, Calendar as CalendarIcon } from "lucide-react";
+import { useState } from "react";
+import { BarChart3, Download, FileText, PieChart, TrendingUp, Calendar as CalendarIcon, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const reportsList = [
@@ -23,6 +24,8 @@ const reportsList = [
 ];
 
 export default function Reports() {
+  const [activeAISummary, setActiveAISummary] = useState<string | null>(null);
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -81,28 +84,45 @@ export default function Reports() {
       </div>
 
       <div className="mt-8 rounded-xl border border-border bg-card overflow-hidden">
-        <div className="border-b border-border bg-muted/20 px-6 py-4">
+        <div className="border-b border-border bg-muted/20 px-6 py-4 flex items-center justify-between">
           <h2 className="font-heading text-lg font-semibold text-foreground">Available Reports</h2>
         </div>
         <div className="divide-y divide-border">
           {reportsList.map((report) => (
-            <div key={report.title} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 transition-colors hover:bg-muted/10">
-              <div className="flex items-start gap-4">
-                <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/5 text-primary">
-                  <report.icon className="h-5 w-5" />
+            <div key={report.title} className="flex flex-col transition-colors hover:bg-muted/10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6">
+                <div className="flex items-start gap-4">
+                  <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/5 text-primary">
+                    <report.icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">{report.title}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">{report.description}</p>
+                    <p className="mt-2 flex items-center text-xs text-muted-foreground">
+                      <CalendarIcon className="mr-1.5 h-3 w-3" />
+                      {report.date}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-foreground">{report.title}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{report.description}</p>
-                  <p className="mt-2 flex items-center text-xs text-muted-foreground">
-                    <CalendarIcon className="mr-1.5 h-3 w-3" />
-                    {report.date}
-                  </p>
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                  <Button variant="ghost" className="gap-2 sm:w-auto w-full border border-primary/20 bg-primary/5 hover:bg-primary/10 text-primary" onClick={() => setActiveAISummary(activeAISummary === report.title ? null : report.title)}>
+                    <Sparkles className="h-4 w-4" /> AI Summary {activeAISummary === report.title ? <ChevronUp className="h-3 w-3"/> : <ChevronDown className="h-3 w-3"/>}
+                  </Button>
+                  <Button variant="outline" className="sm:w-auto w-full gap-2 shrink-0">
+                    <Download className="h-4 w-4" /> Generate
+                  </Button>
                 </div>
               </div>
-              <Button variant="outline" className="sm:w-auto w-full gap-2 shrink-0">
-                <Download className="h-4 w-4" /> Generate
-              </Button>
+              {activeAISummary === report.title && (
+                <div className="px-6 pb-6 pt-0 animate-in fade-in slide-in-from-top-2 duration-300">
+                  <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
+                     <p className="text-sm font-semibold text-primary flex items-center gap-1.5 mb-2"><Sparkles className="h-4 w-4" /> Auto-Generated Summary</p>
+                     <p className="text-sm text-muted-foreground leading-relaxed">
+                        Based on the data within the <span className="font-medium text-foreground">{report.title}</span>, there is a positive upward trend observed over the past 30 days. Actionable intelligence suggests a strong performance correlated with recent LMS restructuring. Focus specifically on modules 3 and 4 for continued growth.
+                     </p>
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
