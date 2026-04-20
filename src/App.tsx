@@ -12,6 +12,7 @@ import MyLearning from "@/pages/MyLearning";
 import Certificates from "@/pages/Certificates";
 import TrainingCalendar from "@/pages/TrainingCalendar";
 import EmployeeExams from "@/pages/EmployeeExams";
+import TakeExam from "@/pages/TakeExam";
 import Discussions from "@/pages/Discussions";
 import Reports from "@/pages/Reports";
 import Support from "@/pages/Support";
@@ -25,6 +26,7 @@ import LDCourses from "@/pages/ld/LDCourses";
 import LDRecords from "@/pages/ld/LDRecords";
 import LDCommunications from "@/pages/ld/LDCommunications";
 import LDExams from "@/pages/ld/LDExams";
+import LDInvigilator from "@/pages/ld/LDInvigilator";
 import LDClassrooms from "@/pages/ld/LDClassrooms";
 import LDReports from "@/pages/ld/LDReports";
 import LDSupport from "@/pages/ld/LDSupport";
@@ -71,6 +73,7 @@ function AppRoutes() {
         <Route path="/courses/:courseId" element={<CourseDetail />} />
         <Route path="/my-learning" element={<MyLearning />} />
         <Route path="/exams" element={<EmployeeExams />} />
+        <Route path="/exams/:id" element={<TakeExam />} />
         <Route path="/certificates" element={<Certificates />} />
         <Route path="/calendar" element={<TrainingCalendar />} />
         <Route path="/discussions" element={<Discussions />} />
@@ -82,6 +85,7 @@ function AppRoutes() {
         <Route path="/ld/dashboard" element={<LDDashboard />} />
         <Route path="/ld/courses" element={<LDCourses />} />
         <Route path="/ld/exams" element={<LDExams />} />
+        <Route path="/ld/exams/invigilator" element={<LDInvigilator />} />
         <Route path="/ld/records" element={<LDRecords />} />
         <Route path="/ld/communications" element={<LDCommunications />} />
         <Route path="/ld/classrooms" element={<LDClassrooms />} />

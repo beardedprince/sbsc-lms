@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Search, Filter, MoreVertical, Edit, Trash2, Clock, Users, Building, BookOpen } from "lucide-react";
+import { Plus, Search, Filter, MoreVertical, Edit, Trash2, Clock, Users, Building, BookOpen, MonitorPlay, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,7 +9,7 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-
+import { Link } from "react-router-dom";
 import { mockExams, StandaloneExam } from "@/data/mockExams";
 
 export default function LDExams() {
@@ -27,6 +27,8 @@ export default function LDExams() {
       id: Math.random().toString(36).substr(2, 9),
       title: formData.get("title") as string,
       duration: formData.get("duration") as string,
+      startTime: formData.get("startTime") as string,
+      endTime: formData.get("endTime") as string,
       department: formData.get("department") as string,
       role: formData.get("role") as string,
       status: "active",
@@ -44,16 +46,20 @@ export default function LDExams() {
         <div>
           <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground">Stand-Alone Exams</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Upload and manage time-based exams for specific departments, roles, or all employees.
+            Upload and manage time-based exams with access windows.
           </p>
         </div>
         
-        <Dialog open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen}>
-          <DialogTrigger asChild>
-            <Button className="gap-2 shrink-0">
-              <Plus className="h-4 w-4" /> Upload Exam
-            </Button>
-          </DialogTrigger>
+        <div className="flex gap-2 shrink-0">
+          <Button asChild variant="outline" className="gap-2 shrink-0 border-primary/20 text-primary hover:bg-primary/10">
+            <Link to="/ld/exams/invigilator"><MonitorPlay className="h-4 w-4" /> Live Invigilator</Link>
+          </Button>
+          <Dialog open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen}>
+            <DialogTrigger asChild>
+              <Button className="gap-2 shrink-0">
+                <Plus className="h-4 w-4" /> Upload Exam
+              </Button>
+            </DialogTrigger>
           <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Upload Stand-Alone Exam</DialogTitle>
@@ -74,9 +80,15 @@ export default function LDExams() {
                   </div>
                 </div>
 
+                {/* Access Windows */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Availability Period</label>
-                  <input required type="date" name="deadline" className="w-full rounded-md border bg-background px-3 py-2 text-sm" />
+                  <label className="text-sm font-medium">Access Window Start</label>
+                  <input required type="datetime-local" name="startTime" className="w-full rounded-md border bg-background px-3 py-2 text-sm" />
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Access Window End</label>
+                  <input required type="datetime-local" name="endTime" className="w-full rounded-md border bg-background px-3 py-2 text-sm" />
                 </div>
 
                 {/* Assignment Filters */}
@@ -175,9 +187,15 @@ export default function LDExams() {
                     <div className="text-xs text-muted-foreground mt-0.5">{exam.role}</div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="flex items-center gap-1.5 text-muted-foreground">
-                      <Clock className="h-3.5 w-3.5" />
-                      {exam.duration}
+                    <div className="flex flex-col gap-1.5 text-muted-foreground text-xs">
+                      <div className="flex items-center gap-1.5">
+                        <Clock className="h-3.5 w-3.5" />
+                        {exam.duration}
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <CalendarDays className="h-3.5 w-3.5 shrink-0" />
+                        <span className="line-clamp-1">{new Date(exam.startTime).toLocaleDateString()} {new Date(exam.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - {new Date(exam.endTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                      </div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
@@ -229,6 +247,7 @@ export default function LDExams() {
           </table>
         </div>
       </div>
+    </div>
     </div>
   );
 }

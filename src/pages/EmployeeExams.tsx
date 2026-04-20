@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Search, Filter, Clock, BookOpen, Play } from "lucide-react";
+import { Search, Filter, Clock, BookOpen, Play, CalendarDays } from "lucide-react";
+import { Link } from "react-router-dom";
 import { mockExams, StandaloneExam } from "@/data/mockExams";
 import { Button } from "@/components/ui/button";
 
@@ -47,12 +48,22 @@ export default function EmployeeExams() {
                 {exam.title}
               </h3>
               <div className="mt-auto pt-4 space-y-3">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Clock className="h-4 w-4" />
-                  <span>{exam.duration}</span>
+                <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    <span>{exam.duration}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CalendarDays className="h-4 w-4 shrink-0" />
+                    <span className="text-xs">
+                       {new Date(exam.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - {new Date(exam.endTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                    </span>
+                  </div>
                 </div>
-                <Button className="w-full gap-2 mt-2">
-                  <Play className="h-4 w-4" /> Take Exam
+                <Button asChild className="w-full gap-2 mt-2">
+                  <Link to={`/exams/${exam.id}`}>
+                    <Play className="h-4 w-4" /> Take Exam
+                  </Link>
                 </Button>
               </div>
             </div>
