@@ -139,6 +139,7 @@ export default function LDExams() {
           </DialogContent>
         </Dialog>
       </div>
+      </div>
 
       <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
         <div className="border-b border-border bg-muted/20 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -248,6 +249,6 @@ export default function LDExams() {
         </div>
       </div>
     </div>
-    </div>
+    
   );
 }
