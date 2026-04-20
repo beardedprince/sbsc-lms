@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Play, Search, Filter, Clock, Award, BookOpen } from "lucide-react";
+import { Play, Search, Filter, Clock, Award, BookOpen, CheckCircle, XCircle, FileText } from "lucide-react";
 import { mockCourses, Course } from "@/data/mockCourses";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,12 @@ const statusBadge = {
   not_started: { label: "Not Started", className: "bg-muted text-muted-foreground" },
   failed: { label: "Failed", className: "bg-destructive/10 text-destructive" },
 };
+
+const mockExamGrades = [
+  { id: "1", title: "Information Security Exam", date: "2026-03-15", score: 92, status: "passed", required: 80 },
+  { id: "2", title: "AML Compliance Assessment", date: "2026-02-28", score: 65, status: "failed", required: 75 },
+  { id: "3", title: "Customer Service Basics", date: "2026-01-10", score: 88, status: "passed", required: 70 }
+];
 
 function CourseCard({ course }: { course: Course }) {
   return (
@@ -32,8 +38,8 @@ function CourseCard({ course }: { course: Course }) {
           <span className="text-xs font-medium text-muted-foreground px-2 py-1 bg-secondary/10 rounded-md">
             {course.department}
           </span>
-          <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap", statusBadge[course.status].className)}>
-            {statusBadge[course.status].label}
+          <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap", statusBadge[course.status as keyof typeof statusBadge].className)}>
+            {statusBadge[course.status as keyof typeof statusBadge].label}
           </span>
         </div>
         <h3 className="font-heading text-base font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors">
@@ -79,7 +85,6 @@ export default function MyLearning() {
   const completedCourses = mockCourses.filter((c) => c.status === "completed");
   const notStartedCourses = mockCourses.filter((c) => c.status === "not_started");
 
-  // Only filtering based on title for demonstration
   const filterCourses = (courses: Course[]) => {
     if (!searchQuery) return courses;
     return courses.filter(c => c.title.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -163,6 +168,18 @@ export default function MyLearning() {
             >
               Completed <span className="ml-2 rounded-full bg-muted px-2 py-0.5 text-xs">{completedCourses.length}</span>
             </TabsTrigger>
+            <TabsTrigger 
+              value="history"
+              className="relative rounded-none px-4 py-2 text-sm font-medium text-muted-foreground after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:opacity-0 data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:after:opacity-100"
+            >
+              Learning History
+            </TabsTrigger>
+            <TabsTrigger 
+              value="grades"
+              className="relative rounded-none px-4 py-2 text-sm font-medium text-muted-foreground after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:opacity-0 data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none data-[state=active]:after:opacity-100"
+            >
+              Exam Grades
+            </TabsTrigger>
           </TabsList>
         </div>
 
@@ -230,6 +247,100 @@ export default function MyLearning() {
               </p>
             </div>
           )}
+        </TabsContent>
+
+        <TabsContent value="history" className="mt-6 border-none p-0 outline-none">
+          <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead className="text-xs text-muted-foreground uppercase bg-muted/30 border-b border-border">
+                  <tr>
+                    <th className="px-6 py-4 font-medium">Course Title</th>
+                    <th className="px-6 py-4 font-medium">Department</th>
+                    <th className="px-6 py-4 font-medium">Duration</th>
+                    <th className="px-6 py-4 font-medium">Status & Progress</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {filterCourses(mockCourses).map((course) => (
+                    <tr key={course.id} className="hover:bg-muted/10 transition-colors">
+                      <td className="px-6 py-4 font-medium text-foreground">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-md bg-primary/10 text-primary">
+                            <BookOpen className="h-5 w-5" />
+                          </div>
+                          <div className="line-clamp-2 max-w-[250px]">{course.title}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">{course.department}</td>
+                      <td className="px-6 py-4 text-muted-foreground">{course.duration}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <span className={cn("px-2.5 py-1 rounded-full text-xs font-medium border whitespace-nowrap", statusBadge[course.status as keyof typeof statusBadge].className)}>
+                            {statusBadge[course.status as keyof typeof statusBadge].label}
+                          </span>
+                          {course.progress > 0 && course.progress < 100 && (
+                             <span className="text-xs text-muted-foreground font-medium">{course.progress}%</span>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="grades" className="mt-6 border-none p-0 outline-none">
+          <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead className="text-xs text-muted-foreground uppercase bg-muted/30 border-b border-border">
+                  <tr>
+                    <th className="px-6 py-4 font-medium">Exam Title</th>
+                    <th className="px-6 py-4 font-medium">Date Taken</th>
+                    <th className="px-6 py-4 font-medium">Score</th>
+                    <th className="px-6 py-4 font-medium">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {mockExamGrades.map((exam) => (
+                    <tr key={exam.id} className="hover:bg-muted/10 transition-colors">
+                      <td className="px-6 py-4 font-medium text-foreground">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-md bg-secondary/10 text-secondary">
+                            <FileText className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <div className="line-clamp-1">{exam.title}</div>
+                            <div className="text-xs text-muted-foreground">Required Score: {exam.required}%</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-muted-foreground">{exam.date}</td>
+                      <td className="px-6 py-4">
+                        <div className="font-semibold">{exam.score}%</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        {exam.status === "passed" ? (
+                          <div className="flex items-center gap-1.5 text-success">
+                            <CheckCircle className="h-4 w-4" />
+                            <span className="text-sm font-medium">Passed</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1.5 text-destructive">
+                            <XCircle className="h-4 w-4" />
+                            <span className="text-sm font-medium">Failed</span>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </TabsContent>
       </Tabs>
     </div>

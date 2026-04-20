@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Search, Filter, MoreVertical, Edit, Trash2, Clock, Users, Building, FileSpreadsheet } from "lucide-react";
+import { Plus, Search, Filter, MoreVertical, Edit, Trash2, Clock, Users, Building, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -180,7 +180,7 @@ export default function LDExams() {
                   <td className="px-6 py-4 font-medium text-foreground">
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-md bg-secondary/10 text-secondary">
-                        <FileSpreadsheet className="h-5 w-5" />
+                        <BookOpen className="h-5 w-5" />
                       </div>
                       <div className="line-clamp-2 max-w-[250px]">{exam.title}</div>
                     </div>
