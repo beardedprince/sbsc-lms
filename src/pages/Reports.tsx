@@ -30,7 +30,7 @@ export default function Reports() {
     <div className="space-y-8 animate-in fade-in duration-500">
        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground">My Reports</h1>
+          <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground"> Reports</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Generate and download your personal learning analytics and transcripts.
           </p>

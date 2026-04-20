@@ -22,6 +22,7 @@ import {
   Terminal,
   Activity,
   ChevronDown,
+  ClipboardList,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
@@ -34,7 +35,7 @@ const employeeNavItems = [
   { icon: Award, label: "Certificates", path: "/certificates" },
   { icon: Calendar, label: "Training Calendar", path: "/calendar" },
   { icon: MessageSquare, label: "Discussions", path: "/discussions" },
-  { icon: BarChart3, label: "Reports", path: "/reports" },
+  // { icon: BarChart3, label: "Reports", path: "/reports" },
   { icon: HelpCircle, label: "Support", path: "/support" },
   { icon: Settings, label: "Settings", path: "/settings" },
 ];
@@ -42,6 +43,7 @@ const employeeNavItems = [
 const ldNavItems = [
   { icon: LayoutDashboard, label: "L&D Dashboard", path: "/ld/dashboard" },
   { icon: BookOpen, label: "Course Management", path: "/ld/courses" },
+  { icon: ClipboardList, label: "Exams", path: "/ld/exams" },
   { icon: FileText, label: "Records Management", path: "/ld/records" },
   { icon: MessageSquare, label: "Communications", path: "/ld/communications" },
   { icon: MonitorPlay, label: "Classroom Training", path: "/ld/classrooms" },

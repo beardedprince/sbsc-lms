@@ -23,6 +23,7 @@ import LDDashboard from "@/pages/ld/LDDashboard";
 import LDCourses from "@/pages/ld/LDCourses";
 import LDRecords from "@/pages/ld/LDRecords";
 import LDCommunications from "@/pages/ld/LDCommunications";
+import LDExams from "@/pages/ld/LDExams";
 import LDClassrooms from "@/pages/ld/LDClassrooms";
 import LDReports from "@/pages/ld/LDReports";
 import LDSupport from "@/pages/ld/LDSupport";
@@ -78,6 +79,7 @@ function AppRoutes() {
         {/* L&D Routes */}
         <Route path="/ld/dashboard" element={<LDDashboard />} />
         <Route path="/ld/courses" element={<LDCourses />} />
+        <Route path="/ld/exams" element={<LDExams />} />
         <Route path="/ld/records" element={<LDRecords />} />
         <Route path="/ld/communications" element={<LDCommunications />} />
         <Route path="/ld/classrooms" element={<LDClassrooms />} />

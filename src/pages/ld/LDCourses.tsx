@@ -36,6 +36,7 @@ export default function LDCourses() {
       thumbnail: "",
       instructor: formData.get("instructor") as string,
       type: formData.get("type") as any,
+      retakeLimit: parseInt(formData.get("retakeLimit") as string) || 1,
     };
 
     setCourses([newCourse, ...courses]);
@@ -110,6 +111,10 @@ export default function LDCourses() {
                     <option value="mixed">Mixed Media</option>
                     <option value="exam">Assessment Only</option>
                   </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Failed Exam Retake Limit</label>
+                  <input required type="number" min="0" defaultValue="1" name="retakeLimit" className="w-full rounded-md border bg-background px-3 py-2 text-sm" placeholder="e.g. 1" />
                 </div>
               </div>
               <DialogFooter className="mt-6 pt-4 border-t border-border">

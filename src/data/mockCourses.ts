@@ -12,6 +12,7 @@ export interface Course {
   instructor: string;
   dueDate?: string;
   type: "video" | "text" | "mixed" | "exam";
+  retakeLimit?: number;
 }
 
 export const mockCourses: Course[] = [
@@ -29,6 +30,7 @@ export const mockCourses: Course[] = [
     instructor: "Dr. Fatima Ibrahim",
     dueDate: "2026-05-01",
     type: "mixed",
+    retakeLimit: 1,
   },
   {
     id: "2",
