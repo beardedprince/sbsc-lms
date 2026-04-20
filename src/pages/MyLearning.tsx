@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Play, Search, Filter, Clock, Award, BookOpen, CheckCircle, XCircle, FileText } from "lucide-react";
+import { Play, Search, Filter, Clock, Award, BookOpen, CheckCircle, XCircle, FileText, Download, Eye, RefreshCw, X } from "lucide-react";
 import { mockCourses, Course } from "@/data/mockCourses";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 
 const statusBadge = {
   in_progress: { label: "In Progress", className: "bg-info/10 text-info" },
@@ -302,6 +304,7 @@ export default function MyLearning() {
                     <th className="px-6 py-4 font-medium">Date Taken</th>
                     <th className="px-6 py-4 font-medium">Score</th>
                     <th className="px-6 py-4 font-medium">Status</th>
+                    <th className="px-6 py-4 font-medium text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
@@ -332,6 +335,87 @@ export default function MyLearning() {
                           <div className="flex items-center gap-1.5 text-destructive">
                             <XCircle className="h-4 w-4" />
                             <span className="text-sm font-medium">Failed</span>
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        {exam.status === "failed" ? (
+                          <Button variant="outline" size="sm" className="h-8 gap-1.5 text-destructive border-destructive/20 hover:bg-destructive/10 hover:text-destructive">
+                            <RefreshCw className="h-3.5 w-3.5" /> Retake Exam
+                          </Button>
+                        ) : (
+                          <div className="flex items-center justify-end gap-2">
+                            <Button variant="outline" size="sm" className="h-8 text-primary border-primary/20 hover:bg-primary/10">
+                              Request Certificate
+                            </Button>
+                            
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button variant="outline" size="sm" className="h-8 gap-1.5">
+                                  <Eye className="h-3.5 w-3.5" /> View
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="sm:max-w-3xl p-0 border-0 bg-transparent shadow-none">
+                                <div className="relative aspect-[1.414/1] w-full rounded-sm bg-card border-8 border-double border-primary/20 p-8 shadow-2xl flex flex-col items-center justify-center text-center bg-white dark:bg-zinc-950 overflow-hidden">
+                                  <div className="absolute top-2 left-2 w-16 h-16 border-t-2 border-l-2 border-primary/30"></div>
+                                  <div className="absolute top-2 right-2 w-16 h-16 border-t-2 border-r-2 border-primary/30"></div>
+                                  <div className="absolute bottom-2 left-2 w-16 h-16 border-b-2 border-l-2 border-primary/30"></div>
+                                  <div className="absolute bottom-2 right-2 w-16 h-16 border-b-2 border-r-2 border-primary/30"></div>
+                                  
+                                  <DialogClose className="absolute top-4 right-4 rounded-full p-2 bg-muted/50 hover:bg-muted transition-colors opacity-70 hover:opacity-100 z-10">
+                                    <X className="h-4 w-4" />
+                                  </DialogClose>
+                                  
+                                  <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary/5 blur-3xl"></div>
+                                  <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-secondary/5 blur-3xl"></div>
+
+                                  <div className="space-y-6 flex flex-col justify-center h-full relative z-0 w-full px-8 pt-8">
+                                    <div>
+                                      <Award className="h-16 w-16 text-primary/40 mx-auto mb-4" strokeWidth={1} />
+                                      <p className="text-sm font-semibold tracking-[0.2em] text-primary/80 uppercase mb-4">Certificate of Excellence</p>
+                                      <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground px-12 leading-tight">{exam.title}</h2>
+                                    </div>
+                                    
+                                    <div className="py-6 sm:py-8">
+                                      <p className="text-sm text-muted-foreground mb-2">This is to certify that</p>
+                                      <p className="text-2xl sm:text-3xl font-serif text-foreground font-semibold italic">John Doe</p>
+                                    </div>
+                                    
+                                    <div>
+                                      <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+                                        has passed the examination with a score of {exam.score}% and successfully completed the requirements.
+                                      </p>
+                                    </div>
+                                    
+                                    <div className="flex items-end justify-between w-full px-4 sm:px-12 mt-auto pt-12 pb-4">
+                                      <div className="text-center w-32">
+                                        <div className="border-b border-muted-foreground/30 mb-2 pb-1">
+                                          <p className="text-sm font-medium text-foreground">{exam.date}</p>
+                                        </div>
+                                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Date Issued</p>
+                                      </div>
+                                      
+                                      <div className="flex h-20 w-20 items-center justify-center rounded-full border border-dashed border-primary/30 rotate-[15deg]">
+                                        <div className="flex h-16 w-16 items-center justify-center rounded-full border border-primary/20 bg-primary/5">
+                                          <CheckCircle className="h-8 w-8 text-primary/50" strokeWidth={1.5} />
+                                        </div>
+                                      </div>
+                                      
+                                      <div className="text-center w-32">
+                                        <div className="border-b border-muted-foreground/30 mb-2 pb-1">
+                                          <span className="text-lg font-serif italic text-foreground opacity-80">Director</span>
+                                        </div>
+                                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Authorized Signature</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+
+                            <Button size="sm" className="h-8 gap-1.5">
+                              <Download className="h-3.5 w-3.5" /> Download
+                            </Button>
                           </div>
                         )}
                       </td>

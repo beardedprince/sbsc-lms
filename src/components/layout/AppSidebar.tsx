@@ -32,6 +32,7 @@ const employeeNavItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
   { icon: BookOpen, label: "Course Catalog", path: "/courses" },
   { icon: GraduationCap, label: "My Learning", path: "/my-learning" },
+  { icon: ClipboardList, label: "My Exams", path: "/exams" },
   { icon: Award, label: "Certificates", path: "/certificates" },
   { icon: Calendar, label: "Training Calendar", path: "/calendar" },
   { icon: MessageSquare, label: "Discussions", path: "/discussions" },

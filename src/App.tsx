@@ -11,6 +11,7 @@ import Courses from "@/pages/Courses";
 import MyLearning from "@/pages/MyLearning";
 import Certificates from "@/pages/Certificates";
 import TrainingCalendar from "@/pages/TrainingCalendar";
+import EmployeeExams from "@/pages/EmployeeExams";
 import Discussions from "@/pages/Discussions";
 import Reports from "@/pages/Reports";
 import Support from "@/pages/Support";
@@ -69,6 +70,7 @@ function AppRoutes() {
         <Route path="/courses" element={<Courses />} />
         <Route path="/courses/:courseId" element={<CourseDetail />} />
         <Route path="/my-learning" element={<MyLearning />} />
+        <Route path="/exams" element={<EmployeeExams />} />
         <Route path="/certificates" element={<Certificates />} />
         <Route path="/calendar" element={<TrainingCalendar />} />
         <Route path="/discussions" element={<Discussions />} />
